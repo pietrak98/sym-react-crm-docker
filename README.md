@@ -10,8 +10,18 @@ Symfony4: https://symfony.com/
 React JS: https://reactjs.org/
 
 
-## How to use online
+## How to run
 
-Application deployed and accessible on [crm.devedanos.com](https://crm.devedanos.com)
+`docker compose up --build`
 
-Try it out with test@sym.com as email and "password" for the password.
+`docker exec -it crm-php composer install`
+
+`docker exec -it crm-php php bin/console lexik:jwt:generate-keypair --overwrite`
+
+`docker exec -it crm-php php bin/console doctrine:fixtures:load`
+
+`docker exec -it crm-node yarn install`
+
+`docker exec -it crm-node yarn build`
+
+
