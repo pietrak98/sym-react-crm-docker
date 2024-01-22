@@ -10,6 +10,8 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 
 /**
  * @ORM\Entity(repositoryClass=InvoiceRepository::class)
@@ -45,6 +47,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "sentAt"
  *     }
  * )
+ * @ApiFilter(
+ *      SearchFilter::class,
+ *      properties={
+ *           "status": "exact",
+ *      }
+ *  )
+ * @ApiFilter(RangeFilter::class, properties={"chrono"})
+ *
  */
 class Invoice
 {

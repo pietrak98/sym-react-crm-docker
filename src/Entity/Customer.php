@@ -31,7 +31,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * (collectionOperations={"get"={"path"="/clients"}, "post"}, itemOperations={"get"={"path"="/clients/{id}"}, "put", "delete"})
  * the http methods needs to be in lowercase
  * For subresourceOperations, we define parameters about the subresource operations
- * @ApiFilter(SearchFilter::class)
+ * @ApiFilter(SearchFilter::class,
+ *   properties={
+ *            "company": "partial",
+ *       })
  * @ApiFilter(OrderFilter::class)
  */
 class Customer
@@ -74,7 +77,6 @@ class Customer
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"customers_read", "invoices_read"})
      * @Assert\Length(max="255", maxMessage="The company name must be shorter than 255 characters", allowEmptyString = true)
-
      */
     private $company;
 
@@ -104,7 +106,7 @@ class Customer
      */
     public function getTotalAmount(): float
     {
-        return array_reduce($this->invoices->toArray(), function($total, $invoice) {
+        return array_reduce($this->invoices->toArray(), function ($total, $invoice) {
             return $total + $invoice->getAmount();
         }, 0);
     }
@@ -116,9 +118,9 @@ class Customer
      */
     public function getUnpaidAmount(): float
     {
-        return array_reduce($this->invoices->toArray(), function($total, $invoice) {
+        return array_reduce($this->invoices->toArray(), function ($total, $invoice) {
             return $total + ($invoice->getStatus() === 'PAID' || $invoice->getStatus() === 'CANCELED' ? 0 :
-            $invoice->getAmount());
+                    $invoice->getAmount());
         }, 0);
     }
 
