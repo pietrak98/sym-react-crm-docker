@@ -23,8 +23,11 @@ services:
     volumes:
       - .:/var/www/application
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./data/openssl_certs:/etc/nginx/certs:ro
+
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - php-fpm
 
@@ -49,6 +52,12 @@ services:
     tty: true
     environment:
       NODE_ENV: development
+
+  openssl:
+    container_name: crm-open-ssl
+    build: docker/openssl
+    volumes:
+      - ./data/openssl_certs:/home/openssl-certs:rw
 
 volumes:
   db:
