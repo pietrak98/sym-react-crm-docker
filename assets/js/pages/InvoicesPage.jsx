@@ -40,32 +40,40 @@ const itemsPerPage = 10;
  */
 const InvoicesPage = (props) => {
     const [ invoices, setInvoices ] = useState([]);
+    const [totalItems, setTotalItems] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
     const [ loading, setLoading ] = useState(true)
 
     // Manage invoices fetch in API
-    const fetchInvoices = async () => {
+    const fetchInvoices = async (currentPage) => {
         try {
-            const data = await InvoicesAPI.findAll()
-            setInvoices(data);
-            setLoading(false);
+            await InvoicesAPI.getPaginated(currentPage)
+                .then(
+                    (data) => {
+                        setInvoices(data.data['hydra:member'])
+                        setLoading(false);
+                        setTotalItems(data.data['hydra:totalItems'])
+                    }
+                )
         } catch (error) {
-            // console.log(error.response);
-            toast.error('Error at invoices loading.')
+            // console.log(error)
+            toast.error('Error at invoices loading ❌')
         }
+
     }
     // Manage DateTime format in UI
     const formatDate = (str) => moment(str).format('DD/MM/YYYY');
 
     // Manage data fetching at page loading
     useEffect(() => {
-        fetchInvoices()
-    }, [])
+        fetchInvoices(currentPage)
+    }, [currentPage])
 
     // Manage page changes
     const handlePageChange = (page) => {
         setCurrentPage(page);
+        setLoading(true);
     }
 
     // Manage searchbar
@@ -87,25 +95,6 @@ const InvoicesPage = (props) => {
             // console.log(error)
         }
     }
-
-    const filteredInvoices = invoices.filter(
-        i =>
-            search.value !== '' &&
-            (
-                i.sentAt.toLowerCase().includes(search.toLowerCase()) ||
-                i.customer.lastName.toLowerCase().includes(search.toLowerCase()) ||
-                i.customer.firstName.toLowerCase().includes(search.toLowerCase()) ||
-                i.amount.toString().startsWith(search.toLowerCase()) ||
-                STATUS_LABELS[i.status].toLowerCase().includes(search.toLowerCase())
-            )
-    )
-
-    // Manage pagination service for this page
-    const paginatedInvoices = Pagination.getData(
-        filteredInvoices,
-        currentPage,
-        itemsPerPage
-    );
 
     return (
         <>
@@ -135,7 +124,7 @@ const InvoicesPage = (props) => {
                 </thead>
                 <tbody>
                     {!loading &&
-                        paginatedInvoices.map( invoice =>
+                        invoices.map( invoice =>
                             <tr key={invoice.id}>
                                 <td>{invoice.chrono}</td>
                                 <td>
@@ -175,7 +164,7 @@ const InvoicesPage = (props) => {
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 onPageChanged={handlePageChange}
-                length={filteredInvoices.length}
+                length={totalItems}
             />
         </>
     );

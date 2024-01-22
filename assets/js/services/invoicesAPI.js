@@ -1,10 +1,16 @@
 import axios from 'axios';
-import {INVOICES_API} from "../config";
+import {CUSTOMERS_API, INVOICES_API} from '../config';
 
 function findAll() {
     return axios.get(INVOICES_API)
         .then(response => response.data['hydra:member'])
     ;
+}
+async function getPaginated(currentPage) {
+    return axios.get(`${INVOICES_API}?page=${currentPage}`)
+        .then(response => {
+            return response;
+        });
 }
 
 function deleteInvoice(id) {
@@ -31,7 +37,7 @@ function create(invoice){
     )
 }
 export default {
-    findAll,
+    findAll, getPaginated,
     delete: deleteInvoice,
     find,
     update,

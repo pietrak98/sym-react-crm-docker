@@ -15,7 +15,7 @@ import { HashRouter, Switch, Route, withRouter, Redirect } from 'react-router-do
 import Navbar from "./js/components/Navbar";
 import HomePage from "./js/pages/HomePage";
 import CustomersPage from "./js/pages/CustomersPage";
-// import CustomersPageWithPagination from "./js/pages/CustomerPageWithPagination";
+import CustomersPageWithPagination from "./js/pages/CustomerPageWithPagination";
 import InvoicesPage from "./js/pages/InvoicesPage";
 import LoginPage from "./js/pages/LoginPage";
 import AuthAPI from "./js/services/authAPI";
@@ -53,7 +53,7 @@ const App = () => {
                         <Route path={"/login"} component={LoginPage} />
                         <Route path={"/signup"} component={SignupPage} />
                         <PrivateRoute path={"/customers/:id"} component={CustomerPage} />
-                        <PrivateRoute path={"/customers"} component={CustomersPage} />
+                        <PrivateRoute path={"/customers"} component={CustomersPageWithPagination} />
                         {/*<Route path={"/customers"} render={(props) => {*/}
                         {/*    return isAuthenticated && <CustomersPage {...props} /> || <Redirect to={"/login"} />*/}
                         {/*}}/> */}

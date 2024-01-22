@@ -8,11 +8,17 @@ async function findAll() {
 
     return axios.get(CUSTOMERS_API)
         .then(response => {
-            // customers = response.data['hydra:member']
-            Cache.set('customers', response.data['hydra:member']);
             return response.data['hydra:member']
         });
 }
+
+async function getPaginated(currentPage) {
+    return axios.get(`${CUSTOMERS_API}?page=${currentPage}`)
+        .then(response => {
+            return response;
+        });
+}
+
 
 function deleteCustomer(id) {
    // if i go in then it means it works. Was an error, go in cactch
@@ -74,7 +80,7 @@ function create(customer) {
 }
 
 export default {
-    findAll,
+    findAll, getPaginated,
     find,
     delete: deleteCustomer,
     update,
