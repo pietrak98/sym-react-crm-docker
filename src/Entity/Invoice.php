@@ -15,6 +15,13 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 
 /**
  * @ORM\Entity(repositoryClass=InvoiceRepository::class)
+ * @ORM\Table(name="invoice",
+ *      indexes={
+ *      @ORM\Index(name="idx_status", columns={"status"}),
+ *      @ORM\Index(name="idx_chrono", columns={"chrono"}),
+ *      @ORM\Index(name="idx_amount", columns={"amount"}),
+ *      @ORM\Index(name="idx_sentAt", columns={"sent_at"})
+ *  })
  * @ApiResource(
  *     subresourceOperations={
  *          "api_customers_invoices_get_subresource"={

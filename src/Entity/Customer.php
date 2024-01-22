@@ -16,6 +16,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
+ * @ORM\Table(name="customer",
+ * *      indexes={
+ * *      @ORM\Index(name="idx_company", columns={"company"})
+ * *  })
  * @ApiResource(
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put", "delete"},
@@ -35,7 +39,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *   properties={
  *            "company": "partial",
  *       })
- * @ApiFilter(OrderFilter::class)
  */
 class Customer
 {
